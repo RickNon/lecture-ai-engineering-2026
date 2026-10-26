@@ -11,6 +11,7 @@
 """
 
 import argparse
+import time
 
 from google import genai
 from google.genai import errors
@@ -33,7 +34,11 @@ def answer_question(
     return response
 
 def ask(question: str, chat, temperature: float = 0.0) -> str:
+    started_at = time.perf_counter()
     response = answer_question(question, chat, temperature)
+    elapsed_seconds = time.perf_counter() - started_at
+
+    print(f"[usage] 応答時間: {elapsed_seconds:.2f}秒")
     usage = response.usage_metadata
     if usage is not None:
         print(f"[usage] 入力トークン数: {usage.prompt_token_count}")
